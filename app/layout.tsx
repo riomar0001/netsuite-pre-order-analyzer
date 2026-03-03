@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Order Analyzer",
-  description: "A tool to validate and analyze order files in TSV/TXT format. Upload your order file to check for errors and gain insights into your orders.",
+  description:
+    "A tool to validate and analyze order files in TSV/TXT format. Upload your order file to check for errors and gain insights into your orders.",
 };
 
 export default function RootLayout({
@@ -24,6 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Analytics />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
