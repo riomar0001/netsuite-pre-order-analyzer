@@ -24,9 +24,7 @@ export function useAnalysis() {
     setFileName(''); setFileKey(k => k + 1); setSelectedRow(null);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const processFile = (file: File) => {
     setFileName(file.name);
     setSelectedRow(null);
     const reader = new FileReader();
@@ -39,6 +37,13 @@ export function useAnalysis() {
     };
     reader.readAsText(file);
   };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) processFile(file);
+  };
+
+  const handleFileDrop = (file: File) => processFile(file);
 
   // ── Derived counts ──────────────────────────────────────────────────────────
   const totalMkoErrors        = useMemo(() => Object.values(mkoErrors).flat().length, [mkoErrors]);
@@ -107,7 +112,7 @@ export function useAnalysis() {
     // state
     rows, mkoErrors, analyzed, fileName, fileKey, selectedRow, setSelectedRow,
     // handlers
-    handleClear, handleFileUpload,
+    handleClear, handleFileUpload, handleFileDrop,
     // counts
     totalMkoErrors, totalConstraintErrors, totalErrors,
     totalOrders, multiAddrOrders, dupSkuOrders, cleanOrders,
