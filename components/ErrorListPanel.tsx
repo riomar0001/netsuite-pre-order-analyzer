@@ -1,4 +1,5 @@
-import { CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { CheckCircle2, ChevronDown } from 'lucide-react';
 import type { RowData, GroupEntry } from '../lib/types';
 import { CONSTRAINTS, badgeColor, badgeShort } from '../lib/constants';
 
@@ -29,6 +30,8 @@ export function ErrorListPanel({ totalErrors, groupedErrors, onSelectRow }: Prop
 }
 
 function OrderErrorGroup({ mko, group, onSelectRow }: { mko: string; group: GroupEntry; onSelectRow: (row: RowData) => void }) {
+  const [open, setOpen] = useState(false);
+
   const totalIssues = group.orderErrors.length + group.constraintRows.reduce(
     (acc: number, r: RowData) => acc + Object.keys(r.fieldErrors!).length, 0
   );
@@ -37,8 +40,13 @@ function OrderErrorGroup({ mko, group, onSelectRow }: { mko: string; group: Grou
   if (group.constraintRows.length > 0) headerTypes.add('Constraint');
 
   return (
-    <div className="px-4 py-3 space-y-1.5">
-      <div className="flex items-center gap-2 mb-1">
+    <div className="border-b border-slate-100 last:border-b-0">
+      {/* Accordion header */}
+      <button
+        className="w-full px-4 py-3 flex items-center gap-2 hover:bg-slate-50 transition-colors text-left"
+        onClick={() => setOpen(o => !o)}
+      >
+        <ChevronDown className={'w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-150 ' + (open ? '' : '-rotate-90')} />
         <span className="font-semibold text-slate-800 text-xs flex-1 truncate">{mko}</span>
         <span className="flex gap-1 shrink-0">
           {[...headerTypes].map(t => (
@@ -46,46 +54,51 @@ function OrderErrorGroup({ mko, group, onSelectRow }: { mko: string; group: Grou
           ))}
         </span>
         <span className="text-xs text-slate-400 tabular-nums shrink-0">{totalIssues}</span>
-      </div>
+      </button>
 
-      {group.orderErrors.map((err, i) => (
-        <div key={'oe' + i} className="text-xs space-y-1">
-          <div className="flex items-start gap-1.5">
-            <span className={'rounded-full px-1.5 py-0.5 font-semibold shrink-0 ' + badgeColor(err.type)}>{badgeShort(err.type)}</span>
-            <span className="text-slate-600 leading-4 mt-0.5">{err.details}</span>
-          </div>
-          {err.type === 'Multiple Addresses' && (
-            <div className="ml-1 space-y-1.5 pl-2 border-l-2 border-red-200">
-              {err.addresses.map((a, ai) => (
-                <div key={ai} className="text-slate-500 leading-4">
-                  <div>{a.addr1}{a.addr2 ? ', ' + a.addr2 : ''}</div>
-                  <div>{a.city}, {a.state} {a.zip}{a.country ? ' ' + a.country : ''}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-
-      {group.constraintRows.map((row, ri) => (
-        <div
-          key={'cr' + ri}
-          className="rounded border border-slate-200 bg-slate-50 px-2.5 py-2 text-xs cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-colors"
-          onClick={() => onSelectRow(row)}
-        >
-          <div className="font-mono text-slate-700 font-medium mb-1.5">{row.sku || '-'}</div>
-          <div className="space-y-1">
-            {Object.entries(row.fieldErrors!).map(([fkey, msgs]) => (
-              <div key={fkey} className="flex items-start gap-1.5">
-                <span className="rounded-full px-1.5 py-0.5 font-semibold bg-orange-100 text-orange-800 shrink-0 whitespace-nowrap">Constraint</span>
-                <span className="text-slate-600 leading-4 mt-0.5">
-                  <span className="font-medium">{CONSTRAINTS[fkey]?.label ?? fkey}:</span> {(msgs as string[])[0]}
-                </span>
+      {/* Accordion body */}
+      {open && (
+        <div className="px-4 pb-3 space-y-1.5">
+          {group.orderErrors.map((err, i) => (
+            <div key={'oe' + i} className="text-xs space-y-1">
+              <div className="flex items-start gap-1.5">
+                <span className={'rounded-full px-1.5 py-0.5 font-semibold shrink-0 ' + badgeColor(err.type)}>{badgeShort(err.type)}</span>
+                <span className="text-slate-600 leading-4 mt-0.5">{err.details}</span>
               </div>
-            ))}
-          </div>
+              {err.type === 'Multiple Addresses' && (
+                <div className="ml-1 space-y-1.5 pl-2 border-l-2 border-red-200">
+                  {err.addresses.map((a, ai) => (
+                    <div key={ai} className="text-slate-500 leading-4">
+                      <div>{a.addr1}{a.addr2 ? ', ' + a.addr2 : ''}</div>
+                      <div>{a.city}, {a.state} {a.zip}{a.country ? ' ' + a.country : ''}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {group.constraintRows.map((row, ri) => (
+            <div
+              key={'cr' + ri}
+              className="rounded border border-slate-200 bg-slate-50 px-2.5 py-2 text-xs cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-colors"
+              onClick={() => onSelectRow(row)}
+            >
+              <div className="font-mono text-slate-700 font-medium mb-1.5">{row.sku || '-'}</div>
+              <div className="space-y-1">
+                {Object.entries(row.fieldErrors!).map(([fkey, msgs]) => (
+                  <div key={fkey} className="flex items-start gap-1.5">
+                    <span className="rounded-full px-1.5 py-0.5 font-semibold bg-orange-100 text-orange-800 shrink-0 whitespace-nowrap">Constraint</span>
+                    <span className="text-slate-600 leading-4 mt-0.5">
+                      <span className="font-medium">{CONSTRAINTS[fkey]?.label ?? fkey}:</span> {(msgs as string[])[0]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }

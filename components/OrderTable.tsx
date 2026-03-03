@@ -14,7 +14,7 @@ export function OrderTable({ rows, selectedRow, onSelectRow, getRowBg }: Props) 
       <table className="text-xs text-left border-collapse w-full">
         <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 sticky top-0 z-10">
           <tr>
-            <th className="px-3 py-2 font-semibold whitespace-nowrap border-r border-slate-200 text-slate-400 text-right">#</th>
+            <th className="px-3 py-2 font-semibold whitespace-nowrap border-r border-slate-200 text-slate-400 text-right w-16 min-w-16">#</th>
             {COLUMNS.map(col => {
               const c = CONSTRAINTS[col.key];
               return (
@@ -35,7 +35,7 @@ export function OrderTable({ rows, selectedRow, onSelectRow, getRowBg }: Props) 
                 className={'border-b border-slate-100 transition-colors cursor-pointer ' + getRowBg(row, i, isSelected)}
                 onClick={() => onSelectRow(isSelected ? null : row)}
               >
-                <td className="px-3 py-1.5 border-r border-slate-100 text-slate-400 text-right tabular-nums select-none">{i + 1}</td>
+                <td className="px-3 py-1.5 border-r border-slate-100 text-slate-400 text-right tabular-nums select-none w-16 min-w-16">{i + 1}</td>
                 {COLUMNS.map(col => {
                   const cellViol = row.fieldErrors?.[col.key];
                   return (
