@@ -1,4 +1,4 @@
-import { UploadCloud, X } from 'lucide-react';
+import { UploadCloud, X, Info } from 'lucide-react';
 
 type Props = {
   analyzed: boolean;
@@ -8,11 +8,31 @@ type Props = {
   onClear: () => void;
 };
 
+const ABOUT_LINES = [
+  'Validates TSV/TXT order files against field constraints.',
+  '',
+  'Detects:',
+  '• Constraint violations — field length & numeric rules',
+  '• Multiple Addresses — same order shipped to different addresses',
+  '• Duplicate SKUs — same SKU repeated within one order',
+  '',
+  'Click any error row to inspect it in the detail panel.',
+];
+
 export function Toolbar({ analyzed, fileName, fileKey, onFileUpload, onClear }: Props) {
   return (
     <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Order Analyzer</h1>
+        <div className="flex items-center gap-1.5">
+          <h1 className="text-xl font-semibold text-slate-900">Order Analyzer</h1>
+          <div className="relative group">
+            <Info className="w-3.5 h-3.5 text-slate-400 hover:text-slate-600 cursor-default transition-colors" />
+            <div className="absolute left-0 top-5 z-50 hidden group-hover:block w-72 bg-slate-900 text-slate-100 text-xs rounded-lg shadow-xl p-3 leading-relaxed whitespace-pre-line pointer-events-none">
+              {ABOUT_LINES.join('\n')}
+              <div className="absolute -top-1.5 left-1 w-3 h-3 bg-slate-900 rotate-45" />
+            </div>
+          </div>
+        </div>
         <p className="text-xs text-slate-500 mt-0.5">Upload a TSV/TXT file to validate orders</p>
       </div>
       <div className="flex items-center gap-3">
