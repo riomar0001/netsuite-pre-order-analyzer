@@ -1,12 +1,12 @@
 'use client';
 
 import { UploadCloud } from 'lucide-react';
-import { useAnalysis } from './hooks/useAnalysis';
-import { Toolbar } from './components/Toolbar';
-import { StatusBar } from './components/StatusBar';
-import { AnalyticsBar } from './components/AnalyticsBar';
-import { OrderTable } from './components/OrderTable';
-import { Sidebar } from './components/Sidebar';
+import { useAnalysis } from '../hooks/useAnalysis';
+import { Toolbar } from '../components/Toolbar';
+import { StatusBar } from '../components/StatusBar';
+import { AnalyticsBar } from '../components/AnalyticsBar';
+import { OrderTable } from '../components/OrderTable';
+import { Sidebar } from '../components/Sidebar';
 
 export default function MkoAnalyzer() {
   const {

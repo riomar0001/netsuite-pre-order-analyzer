@@ -1,4 +1,4 @@
-import type { RowData, OrderError } from '../lib/types';
+import type { RowData } from '../lib/types';
 import { COLUMNS, CONSTRAINTS } from '../lib/constants';
 
 type Props = {
