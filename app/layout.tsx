@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Order Analyzer",
+  title: "Order File Analyzer",
   description:
     "A tool to validate and analyze order files in TSV/TXT format. Upload your order file to check for errors and gain insights into your orders.",
 };
